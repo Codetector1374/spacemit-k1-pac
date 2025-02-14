@@ -85,6 +85,27 @@ impl GPIO {
         unsafe { crate::common::Reg::from_ptr(self.ptr.add(0x90usize) as _) }
     }
 }
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct MFPR {
+    ptr: *mut u8,
+}
+unsafe impl Send for MFPR {}
+unsafe impl Sync for MFPR {}
+impl MFPR {
+    #[inline(always)]
+    pub const unsafe fn from_ptr(ptr: *mut ()) -> Self {
+        Self { ptr: ptr as _ }
+    }
+    #[inline(always)]
+    pub const fn as_ptr(&self) -> *mut () {
+        self.ptr as _
+    }
+    #[inline(always)]
+    pub const fn mfpr(self, n: usize) -> crate::common::Reg<regs::MFPR, crate::common::RW> {
+        assert!(n < 147usize);
+        unsafe { crate::common::Reg::from_ptr(self.ptr.add(0x0usize + n * 4usize) as _) }
+    }
+}
 pub mod regs {
     #[repr(transparent)]
     #[derive(Copy, Clone, Eq, PartialEq)]
@@ -663,6 +684,188 @@ pub mod regs {
     }
     #[repr(transparent)]
     #[derive(Copy, Clone, Eq, PartialEq)]
+    pub struct MFPR(pub u32);
+    impl MFPR {
+        #[doc = "Alternate Function Select"]
+        #[inline(always)]
+        pub const fn af_sel(&self) -> super::vals::AlternateFunction {
+            let val = (self.0 >> 0usize) & 0x07;
+            super::vals::AlternateFunction::from_bits(val as u8)
+        }
+        #[doc = "Alternate Function Select"]
+        #[inline(always)]
+        pub fn set_af_sel(&mut self, val: super::vals::AlternateFunction) {
+            self.0 = (self.0 & !(0x07 << 0usize)) | (((val.to_bits() as u32) & 0x07) << 0usize);
+        }
+        #[doc = "Strong Pull Enable"]
+        #[inline(always)]
+        pub const fn spu(&self) -> bool {
+            let val = (self.0 >> 3usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Strong Pull Enable"]
+        #[inline(always)]
+        pub fn set_spu(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 3usize)) | (((val as u32) & 0x01) << 3usize);
+        }
+        #[doc = "Rising Edge Detection Enable"]
+        #[inline(always)]
+        pub const fn edge_rise_en(&self) -> bool {
+            let val = (self.0 >> 4usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Rising Edge Detection Enable"]
+        #[inline(always)]
+        pub fn set_edge_rise_en(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 4usize)) | (((val as u32) & 0x01) << 4usize);
+        }
+        #[doc = "Falling Edge Detection Enable"]
+        #[inline(always)]
+        pub const fn edge_fall_en(&self) -> bool {
+            let val = (self.0 >> 5usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Falling Edge Detection Enable"]
+        #[inline(always)]
+        pub fn set_edge_fall_en(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 5usize)) | (((val as u32) & 0x01) << 5usize);
+        }
+        #[doc = "Edge Detection Logic Clear"]
+        #[inline(always)]
+        pub const fn edge_clear(&self) -> bool {
+            let val = (self.0 >> 6usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Edge Detection Logic Clear"]
+        #[inline(always)]
+        pub fn set_edge_clear(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 6usize)) | (((val as u32) & 0x01) << 6usize);
+        }
+        #[doc = "Slew Rate Control Enable"]
+        #[inline(always)]
+        pub const fn sle(&self) -> bool {
+            let val = (self.0 >> 7usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Slew Rate Control Enable"]
+        #[inline(always)]
+        pub fn set_sle(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 7usize)) | (((val as u32) & 0x01) << 7usize);
+        }
+        #[doc = "Schmitt Trigger Input Threshold Control"]
+        #[inline(always)]
+        pub const fn st(&self) -> u8 {
+            let val = (self.0 >> 8usize) & 0x03;
+            val as u8
+        }
+        #[doc = "Schmitt Trigger Input Threshold Control"]
+        #[inline(always)]
+        pub fn set_st(&mut self, val: u8) {
+            self.0 = (self.0 & !(0x03 << 8usize)) | (((val as u32) & 0x03) << 8usize);
+        }
+        #[doc = "Drive Strength Configuration"]
+        #[inline(always)]
+        pub const fn drive(&self) -> u8 {
+            let val = (self.0 >> 10usize) & 0x07;
+            val as u8
+        }
+        #[doc = "Drive Strength Configuration"]
+        #[inline(always)]
+        pub fn set_drive(&mut self, val: u8) {
+            self.0 = (self.0 & !(0x07 << 10usize)) | (((val as u32) & 0x07) << 10usize);
+        }
+        #[doc = "Internal Pull-Down Resistor Enable"]
+        #[inline(always)]
+        pub const fn pulldn_en(&self) -> bool {
+            let val = (self.0 >> 13usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Internal Pull-Down Resistor Enable"]
+        #[inline(always)]
+        pub fn set_pulldn_en(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 13usize)) | (((val as u32) & 0x01) << 13usize);
+        }
+        #[doc = "Internal Pull-Up Resistor Enable"]
+        #[inline(always)]
+        pub const fn pullup_en(&self) -> bool {
+            let val = (self.0 >> 14usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Internal Pull-Up Resistor Enable"]
+        #[inline(always)]
+        pub fn set_pullup_en(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 14usize)) | (((val as u32) & 0x01) << 14usize);
+        }
+        #[doc = "Pull Resistor Control Select"]
+        #[inline(always)]
+        pub const fn pull_sel(&self) -> bool {
+            let val = (self.0 >> 15usize) & 0x01;
+            val != 0
+        }
+        #[doc = "Pull Resistor Control Select"]
+        #[inline(always)]
+        pub fn set_pull_sel(&mut self, val: bool) {
+            self.0 = (self.0 & !(0x01 << 15usize)) | (((val as u32) & 0x01) << 15usize);
+        }
+    }
+    impl Default for MFPR {
+        #[inline(always)]
+        fn default() -> MFPR {
+            MFPR(0)
+        }
+    }
+    impl core::fmt::Debug for MFPR {
+        fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+            f.debug_struct("MFPR")
+                .field("af_sel", &self.af_sel())
+                .field("spu", &self.spu())
+                .field("edge_rise_en", &self.edge_rise_en())
+                .field("edge_fall_en", &self.edge_fall_en())
+                .field("edge_clear", &self.edge_clear())
+                .field("sle", &self.sle())
+                .field("st", &self.st())
+                .field("drive", &self.drive())
+                .field("pulldn_en", &self.pulldn_en())
+                .field("pullup_en", &self.pullup_en())
+                .field("pull_sel", &self.pull_sel())
+                .finish()
+        }
+    }
+    #[cfg(feature = "defmt")]
+    impl defmt::Format for MFPR {
+        fn format(&self, f: defmt::Formatter) {
+            #[derive(defmt :: Format)]
+            struct MFPR {
+                af_sel: super::vals::AlternateFunction,
+                spu: bool,
+                edge_rise_en: bool,
+                edge_fall_en: bool,
+                edge_clear: bool,
+                sle: bool,
+                st: u8,
+                drive: u8,
+                pulldn_en: bool,
+                pullup_en: bool,
+                pull_sel: bool,
+            }
+            let proxy = MFPR {
+                af_sel: self.af_sel(),
+                spu: self.spu(),
+                edge_rise_en: self.edge_rise_en(),
+                edge_fall_en: self.edge_fall_en(),
+                edge_clear: self.edge_clear(),
+                sle: self.sle(),
+                st: self.st(),
+                drive: self.drive(),
+                pulldn_en: self.pulldn_en(),
+                pullup_en: self.pullup_en(),
+                pull_sel: self.pull_sel(),
+            };
+            defmt::write!(f, "{}", proxy)
+        }
+    }
+    #[repr(transparent)]
+    #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct PCR(pub u32);
     impl PCR {
         #[doc = "GPIO output port clear (0=unaffected, 1=clear low if output)"]
@@ -896,17 +1099,17 @@ pub mod regs {
     pub struct PLR(pub u32);
     impl PLR {
         #[inline(always)]
-        pub const fn pl(&self, n: usize) -> super::vals::PLR_PL {
+        pub const fn pl(&self, n: usize) -> bool {
             assert!(n < 32usize);
             let offs = 0usize + n * 1usize;
             let val = (self.0 >> offs) & 0x01;
-            super::vals::PLR_PL::from_bits(val as u8)
+            val != 0
         }
         #[inline(always)]
-        pub fn set_pl(&mut self, n: usize, val: super::vals::PLR_PL) {
+        pub fn set_pl(&mut self, n: usize, val: bool) {
             assert!(n < 32usize);
             let offs = 0usize + n * 1usize;
-            self.0 = (self.0 & !(0x01 << offs)) | (((val.to_bits() as u32) & 0x01) << offs);
+            self.0 = (self.0 & !(0x01 << offs)) | (((val as u32) & 0x01) << offs);
         }
     }
     impl Default for PLR {
@@ -963,7 +1166,7 @@ pub mod regs {
         fn format(&self, f: defmt::Formatter) {
             #[derive(defmt :: Format)]
             struct PLR {
-                pl: [super::vals::PLR_PL; 32usize],
+                pl: [bool; 32usize],
             }
             let proxy = PLR {
                 pl: [
@@ -1581,6 +1784,41 @@ pub mod regs {
     }
 }
 pub mod vals {
+    #[repr(u8)]
+    #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+    #[cfg_attr(feature = "defmt", derive(defmt::Format))]
+    pub enum AlternateFunction {
+        Alt0 = 0x0,
+        Alt1 = 0x01,
+        Alt2 = 0x02,
+        Alt3 = 0x03,
+        Alt4 = 0x04,
+        Alt5 = 0x05,
+        Alt6 = 0x06,
+        Alt7 = 0x07,
+    }
+    impl AlternateFunction {
+        #[inline(always)]
+        pub const fn from_bits(val: u8) -> AlternateFunction {
+            unsafe { core::mem::transmute(val & 0x07) }
+        }
+        #[inline(always)]
+        pub const fn to_bits(self) -> u8 {
+            unsafe { core::mem::transmute(self) }
+        }
+    }
+    impl From<u8> for AlternateFunction {
+        #[inline(always)]
+        fn from(val: u8) -> AlternateFunction {
+            AlternateFunction::from_bits(val)
+        }
+    }
+    impl From<AlternateFunction> for u8 {
+        #[inline(always)]
+        fn from(val: AlternateFunction) -> u8 {
+            AlternateFunction::to_bits(val)
+        }
+    }
     #[doc = "Port Level"]
     #[repr(u8)]
     #[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
